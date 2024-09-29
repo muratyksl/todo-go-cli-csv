@@ -33,8 +33,13 @@ func Run() {
 		case text == "help":
 			printHelp()
 		case strings.HasPrefix(text, "add "):
-			title := strings.TrimPrefix(text, "add ")
-			taskList.Add(task.NewTask(title))
+			parts := strings.SplitN(strings.TrimPrefix(text, "add "), "|", 2)
+			title := strings.TrimSpace(parts[0])
+			description := ""
+			if len(parts) > 1 {
+				description = strings.TrimSpace(parts[1])
+			}
+			taskList.Add(task.NewTask(title, description))
 		case strings.HasPrefix(text, "remove "):
 			id := strings.TrimPrefix(text, "remove ")
 			taskList.Remove(id)
@@ -54,12 +59,12 @@ func Run() {
 
 func printHelp() {
 	fmt.Println("Available commands:")
-	fmt.Println("  add <title>   - add a new task")
-	fmt.Println("  remove <id>   - remove a task")
-	fmt.Println("  toggle <id>   - toggle a task")
-	fmt.Println("  list          - list all tasks")
-	fmt.Println("  clear         - clear all tasks")
-	fmt.Println("  exit          - exit the application")
+	fmt.Println("  add <title>|<description>  - add a new task")
+	fmt.Println("  remove <id>                - remove a task")
+	fmt.Println("  toggle <id>                - toggle a task")
+	fmt.Println("  list                       - list all tasks")
+	fmt.Println("  clear                      - clear all tasks")
+	fmt.Println("  exit                       - exit the application")
 }
 
 func toggleTask(taskList *task.TaskList, id string) {

@@ -7,18 +7,20 @@ import (
 )
 
 type Task struct {
-	ID    string
-	Title string
-	Done  bool
+	ID          string
+	Title       string
+	Description string
+	Done        bool
 }
 
 type TaskList []Task
 
-func NewTask(title string) Task {
+func NewTask(title string, description string) Task {
 	return Task{
-		ID:    uuid.New().String(),
-		Title: title,
-		Done:  false,
+		ID:          uuid.New().String(),
+		Title:       title,
+		Description: description,
+		Done:        false,
 	}
 }
 
@@ -28,11 +30,11 @@ func (t *Task) Toggle() {
 
 func (t TaskList) Print() {
 	for _, task := range t {
+		status := "[ ]"
 		if task.Done {
-			fmt.Printf("[x] %s\n", task.Title)
-		} else {
-			fmt.Printf("[ ] %s\n", task.Title)
+			status = "[x]"
 		}
+		fmt.Printf("%s %s: %s\n", status, task.Title, task.Description)
 	}
 }
 

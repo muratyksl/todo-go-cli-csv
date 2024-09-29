@@ -19,7 +19,7 @@ func SaveTasks(tasks task.TaskList) error {
 	defer writer.Flush()
 
 	for _, task := range tasks {
-		writer.Write([]string{task.ID, task.Title, strconv.FormatBool(task.Done)})
+		writer.Write([]string{task.ID, task.Title, task.Description, strconv.FormatBool(task.Done)})
 	}
 
 	return nil
@@ -47,9 +47,10 @@ func LoadTasks() (task.TaskList, error) {
 			return nil, err
 		}
 		tasks = append(tasks, task.Task{
-			ID:    record[0],
-			Title: record[1],
-			Done:  record[2] == "true",
+			ID:          record[0],
+			Title:       record[1],
+			Description: record[2],
+			Done:        record[3] == "true",
 		})
 	}
 
