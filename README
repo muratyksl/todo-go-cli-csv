@@ -1,0 +1,32 @@
+# todo-go
+
+todo-go is a simple command-line todo list application written in Go. It allows users to manage their tasks through a set of easy-to-use commands.
+
+## Features
+
+- Add new tasks
+- Remove tasks
+- Toggle task completion status
+- List all tasks
+- Clear all tasks
+- Persistent storage using CSV file
+
+## Installation
+
+1. Ensure you have Go 1.22.5 or later installed on your system.
+2. Clone this repository:
+   ```
+   git clone https://github.com/yourusername/todo-go.git
+   ```
+3. Navigate to the project directory:
+   ```
+   cd todo-go
+   ```
+4. Build the application:
+   ```
+   go build
+   ```
+5. Run application
+   ```
+   ./main
+   ```
