@@ -12,10 +12,9 @@ import (
 func Run() {
 	taskList, err := storage.LoadTasks()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error loading tasks:", err)
 		os.Exit(1)
 	}
-	defer storage.SaveTasks(taskList)
 
 	fmt.Println("Welcome to todo-go")
 	fmt.Println("Type 'help' to see available commands")
@@ -29,6 +28,10 @@ func Run() {
 
 		switch {
 		case text == "exit":
+			err := storage.SaveTasks(taskList)
+			if err != nil {
+				fmt.Println("Error saving tasks:", err)
+			}
 			os.Exit(0)
 		case text == "help":
 			printHelp()
@@ -39,18 +42,35 @@ func Run() {
 			if len(parts) > 1 {
 				description = strings.TrimSpace(parts[1])
 			}
-			taskList.Add(task.NewTask(title, description))
+			newTask := task.NewTask(title, description)
+			taskList.Add(newTask)
+			fmt.Printf("Task added: %s | %s\n", newTask.Title, newTask.Description)
+			err := storage.SaveTasks(taskList)
+			if err != nil {
+				fmt.Println("Error saving tasks:", err)
+			}
 		case strings.HasPrefix(text, "remove "):
 			id := strings.TrimPrefix(text, "remove ")
 			taskList.Remove(id)
+			err := storage.SaveTasks(taskList)
+			if err != nil {
+				fmt.Println("Error saving tasks:", err)
+			}
 		case strings.HasPrefix(text, "toggle "):
 			id := strings.TrimPrefix(text, "toggle ")
 			toggleTask(&taskList, id)
+			err := storage.SaveTasks(taskList)
+			if err != nil {
+				fmt.Println("Error saving tasks:", err)
+			}
 		case strings.HasPrefix(text, "list"):
 			taskList.Print()
 		case strings.HasPrefix(text, "clear"):
 			taskList = task.TaskList{}
-			storage.SaveTasks(taskList)
+			err := storage.SaveTasks(taskList)
+			if err != nil {
+				fmt.Println("Error saving tasks:", err)
+			}
 		default:
 			fmt.Println("Unknown command")
 		}
